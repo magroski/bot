@@ -1,5 +1,5 @@
 {
-  "name": "bot",
+  "name": "magroskibot",
   "version": "1.0",
   "description": "a node.js slack bot",
   "main": "index.js",
@@ -11,12 +11,7 @@
     "url": "https://github.com/magrosi/bot.git"
   },
   "keywords": [
-    "slack",
-    "api",
-    "rtm",
-    "team",
-    "communication",
-    "bot"
+    "slack"
   ],
   "dependencies": {
     "slackbotapi": "*",
