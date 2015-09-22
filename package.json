@@ -1,6 +1,6 @@
 {
   "name": "magroskibot",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "a node.js slack bot",
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,8 @@
     "jethro": "*",
     "eventemitter3": "*"
   },
-  "author": "magroski",
+  "engines": {
+    "node": "0.12.7"
+  },
   "license": "LGPL-3.0"
 }
