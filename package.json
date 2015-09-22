@@ -1,0 +1,30 @@
+{
+  "name": "bot",
+  "version": "0.1",
+  "description": "a node.js slack bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/magrosi/bot.git"
+  },
+  "keywords": [
+    "slack",
+    "api",
+    "rtm",
+    "team",
+    "communication",
+    "bot"
+  ],
+  "dependencies": {
+    "slackbotapi": "*",
+    "ws": "*",
+    "request": "*",
+    "jethro": "*",
+    "eventemitter3": "*"
+  },
+  "author": "magroski",
+  "license": "LGPL-3.0"
+}
