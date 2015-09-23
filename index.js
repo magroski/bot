@@ -15,7 +15,7 @@ var slack = new slackAPI({
 	'autoReconnect': true
 });
 
-slack.reqApi('channels.join',name:'random'},function(data){});
+slack.reqApi('channels.join',{name:'random'},function(data){});
 
 // Slack on EVENT message, send data.
 slack.on('message', function(data) {
