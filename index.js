@@ -1,3 +1,10 @@
+var http = require("http")
+var express = require("express")
+var app = express()
+var port = process.env.PORT || 5000
+var server = http.createServer(app)
+server.listen(port)
+
 // Requiring our module
 var slackAPI = require('slackbotapi');
 
