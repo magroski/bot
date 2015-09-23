@@ -10,7 +10,7 @@ var slackAPI = require('slackbotapi');
 
 // Starting
 var slack = new slackAPI({
-	'token': "xoxb-11117365730-aPUuJCOsPbZwLrbZdRM58EZW",
+	'token': process.env.SLACK_KEY,
 	'logging': true,
 	'autoReconnect': true
 });
