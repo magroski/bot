@@ -5,7 +5,7 @@ var slackAPI = require('slackbotapi');
 var slack = new slackAPI({
 	'token': "xoxb-11117365730-aPUuJCOsPbZwLrbZdRM58EZW",
 	'logging': true,
-	'autoReconnect': false
+	'autoReconnect': true
 });
 
 // Slack on EVENT message, send data.
@@ -13,7 +13,7 @@ slack.on('message', function(data) {
 	// If no text, return.
 	if(typeof data.text == 'undefined') return;
 	// If someone says 'cake!!' respond to their message with "@user OOH, CAKE!! :cake"
-	if(data.text === 'cake!!') slack.sendMsg(data.channel, "@"+slack.getUser(data.user).name+" OOH, CAKE!! :cake:")
+	if(data.text === 'cake') slack.sendMsg(data.channel, "@"+slack.getUser(data.user).name+" OOH, CAKE!! :cake:")
 
 	// If the first character starts with %, you can change this to your own prefix of course.
 	if(data.text.charAt(0) === '%') {
