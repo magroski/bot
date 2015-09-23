@@ -18,10 +18,12 @@
     "ws": "*",
     "request": "*",
     "jethro": "*",
-    "eventemitter3": "*"
+    "eventemitter3": "*",
+    "ejs": "2.3.3",
+    "express": "4.13.3"
   },
   "engines": {
     "node": "0.12.7"
   },
-  "license": "LGPL-3.0"
+  "license": "MIT"
 }
