@@ -1,29 +1,28 @@
 {
-  "name": "magroskibot",
-  "version": "1.0.0",
-  "description": "a node.js slack bot",
+  "name": "nmagroski-slack-bot",
+  "version": "0.0.1",
+  "description": "A simple slackbot",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/magrosi/bot.git"
-  },
-  "keywords": [
-    "slack"
-  ],
   "dependencies": {
     "slackbotapi": "*",
     "ws": "*",
     "request": "*",
     "jethro": "*",
-    "eventemitter3": "*",
-    "ejs": "2.3.3",
-    "express": "4.13.3"
+    "eventemitter3": "*"
   },
   "engines": {
     "node": "0.12.7"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/magroski/bot"
+  },
+  "keywords": [
+    "node",
+    "slack"
+  ],
   "license": "MIT"
 }
