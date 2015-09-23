@@ -1,22 +1,9 @@
-var express = require('express');
-var app = express();
-
-console.log("ESSA PORRA STARTOU @!@@!@!@!@@!!@!");
-
-app.get('/', function(request, response) {
-  console.log('Node app is running on port');
-});
-
-
-
-
-/*
 // Requiring our module
 var slackAPI = require('slackbotapi');
 
 // Starting
 var slack = new slackAPI({
-	'token': "TOKENHERE",
+	'token': "xoxb-11117365730-aPUuJCOsPbZwLrbZdRM58EZW",
 	'logging': true,
 	'autoReconnect': false
 });
@@ -55,4 +42,3 @@ slack.on('message', function(data) {
 		}
 	}
 });
-*/
