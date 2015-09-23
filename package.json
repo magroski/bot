@@ -1,10 +1,9 @@
 {
   "name": "nmagroski-slack-bot",
   "version": "0.0.1",
-  "description": "A simple slackbot",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/magroski/bot.git"
   },
   "dependencies": {
     "express": "*",
@@ -17,13 +16,7 @@
   "engines": {
     "node": "0.12.7"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/magroski/bot"
-  },
-  "keywords": [
-    "node",
-    "slack"
-  ],
-  "license": "MIT"
+  "scripts": {
+    "start": "node index.js"
+  }
 }
