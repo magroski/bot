@@ -1,3 +1,5 @@
+console.log('oi');
+/*
 // Requiring our module
 var slackAPI = require('slackbotapi');
 
@@ -42,3 +44,4 @@ slack.on('message', function(data) {
 		}
 	}
 });
+*/
