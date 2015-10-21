@@ -12,7 +12,8 @@
     "request": "*",
     "jethro": "*",
     "eventemitter3": "*",
-    "newrelic": "*"
+    "newrelic": "*",
+    "pg": "*"
   },
   "engines": {
     "node": "0.12.7"
