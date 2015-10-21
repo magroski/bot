@@ -17,14 +17,16 @@ var slack = new slackAPI({
 	'autoReconnect': true
 });
 
+var connectionString = process.env.DATABASE_URL;
+var dbClient = new pg.Client(connectionString);
 pg.connect(process.env.DATABASE_URL, function(err, client) {
 	if (err) throw err;
 	console.log('Connected to postgres! Getting schemas...');
 	client
-    	.query('SELECT * FROM reminders;')
-    	.on('row', function(row) {
-      		console.log(JSON.stringify(row));
-    	});
+		.query('SELECT * FROM reminders;')
+		.on('row', function(row) {
+			console.log(JSON.stringify(row));
+		});
 });
 
 //slack.reqAPI('channels.join',{name:'suporte_ti'},function(data){});
@@ -73,6 +75,15 @@ slack.on('message', function(data) {
 											"`Ctrl + Shift + F` Tela cheia \n"+
 											"`Page Up ` Mover uma tela acima \n"+
 											"`Ctrl + Espaço` Remover a formatação")
+				break;
+			case "lembrete":
+				var userName = slack.getUser(data.user).name;
+				var reminderArgs = command[1].split(' ');
+				var date = reminderArgs[0];
+				var reminder = reminderArgs[1];
+				dbClient.connect()
+				var query = dbClient.query("INSERT INTO reminders(username, date, reminder) values($1, $2, $3)", [userName, date, reminder]);
+				query.on('end', function() { client.end(); })
 				break;
 		}
 	}
