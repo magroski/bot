@@ -20,7 +20,6 @@ slack.reqAPI('channels.join',{name:'random'},function(data){});
 // Slack on EVENT message, send data.
 slack.on('message', function(data) {
 	// If no text, return.
-	console.log('oi');
 	if(typeof data.text == 'undefined') return;
 
 	// If the first character starts with %, you can change this to your own prefix of course.
@@ -71,6 +70,8 @@ var birthdays = [];
 birthdays['lucas'] = '21/10';
 
 slack.on('presence_change', function(data){
+	console.log(data);
+	/*
 	var currentTime = new Date();
 	var currentHour = currentTime.getHours()-2;
 	console.log(data.presence);
@@ -83,4 +84,5 @@ slack.on('presence_change', function(data){
 			slack.sendMsg('general','Feliz aniversário @'+userName+' :cake:');
 		}
 	}
+	*/
 });
