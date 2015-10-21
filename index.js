@@ -66,12 +66,10 @@ slack.on('message', function(data) {
 	}
 });
 
-console.log(slack.events);
-
 var birthdays = [];
 birthdays['lucas'] = '21/10';
 
-slack.on('presence_change', function(data){
+slack.on('manual_presence_change', function(data){
 	console.log(data);
 	/*
 	var currentTime = new Date();
