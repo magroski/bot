@@ -69,7 +69,7 @@ slack.on('message', function(data) {
 var birthdays = [];
 birthdays['lucas'] = '21/10';
 
-slack.on('manual_presence_change', function(data){
+slack.on('group_joined', function(data){
 	console.log(data);
 	/*
 	var currentTime = new Date();
