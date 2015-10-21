@@ -25,7 +25,7 @@ slack.on('message', function(data) {
 	if(data.text === 'cake') slack.sendMsg(data.channel, "@"+slack.getUser(data.user).name+" OOH, CAKE!! :cake:")
 
 	// If the first character starts with %, you can change this to your own prefix of course.
-	if(data.text.charAt(0) === '%') {
+	if(data.text.charAt(0) === '!') {
 		// Split the command and it's arguments into an array
 		var command = data.text.substring(1).split(' ');
 
@@ -39,11 +39,12 @@ slack.on('message', function(data) {
 		// Switch to check which command has been requested.
 		switch (command[0].toLowerCase()) {
 			// If hello
-			case "hello":
-				// Send message.
-				slack.sendMsg(data.channel, "Oh, hello @"+slack.getUser(data.user).name+" !")
-			break;
-			
+			case "help":
+				slack.sendMsg(data.channel, "`docs` Lista de comandos do Google Docs \n `help` Essa lista de comandos")
+				break;
+			case "docs":
+				slack.sendMsg(data.channel, "`Ctrl+F` Procura texto no arquivo")
+				break;
 			case "say":
 				var say = data.text.split('%say ');
 				slack.sendMsg(data.channel, say[1]);
