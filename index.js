@@ -67,7 +67,7 @@ slack.on('message', function(data) {
 });
 
 slack.on('channel_joined', function(data){
-	slack.sendMsg(data.channel, "Olá, sou o bot de ajuda da Talentify. Envie `!help` aqui ou em uma mensagem privada para ter acesso à minha lista de comandos")
+	slack.sendMsg(data.channel.id, "Olá, sou o bot de ajuda da Talentify. Envie `!help` aqui ou em uma mensagem privada para ter acesso à minha lista de comandos")
 });
 
 //var birthdays = [];
