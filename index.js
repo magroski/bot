@@ -42,9 +42,9 @@ slack.on('message', function(data) {
 				break;
 			case "docs":
 				slack.sendMsg(data.channel, "`Ctrl+F` Procura texto no arquivo \n"+
-											"`Ctrl + Home  Receba de volta ao topo do seu documento \n"+
+											"`Ctrl + Home` Retorna ao topo do seu documento \n"+
 											"`Ctrl + B` Negrito \n"+
-											"`Ctrl + E` alinhamento Centro \n"+
+											"`Ctrl + E` Centraliza o alinhamento \n"+
 											"`Ctrl + L` Voltar para o alinhamento à esquerda \n"+
 											"`Ctrl + M` Inserir comentário \n"+
 											"`Ctrl + H` Substituir \n"+
