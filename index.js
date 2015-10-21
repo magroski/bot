@@ -71,9 +71,12 @@ birthdays['lucas'] = '21/10';
 
 slack.on('presence_change', function(data){
 	var currentTime = new Date();
-	var currentHour = currentTime.getHours();
+	var currentHour = currentTime.getHours()-2;
+	console.log(data.presence);
+	console.log(currentHour);
+	console.log(slack.getUser(data.user).name);
 	var currentDate = currentTime.getDate()+'/'+(currentTime.getMonth()+1);
-	if(data.presence=='online' && currentHour < 12){
+	if(data.presence=='active' && currentHour < 12){
 		var userName = slack.getUser(data.user).name;
 		if( typeof birthdays[userName] != typeof undefined && birthdays[userName] == currentDate ){
 			slack.sendMsg('general','Feliz aniversário @'+userName+' :cake:');
