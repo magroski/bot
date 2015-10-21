@@ -66,17 +66,13 @@ slack.on('message', function(data) {
 	}
 });
 
-var birthdays = [];
-birthdays['lucas'] = '21/10';
+//var birthdays = [];
+//birthdays['lucas'] = '21/10';
 
-slack.on('group_joined', function(data){
-	console.log(data);
+slack.on('presence_change', function(data){
 	/*
 	var currentTime = new Date();
 	var currentHour = currentTime.getHours()-2;
-	console.log(data.presence);
-	console.log(currentHour);
-	console.log(slack.getUser(data.user).name);
 	var currentDate = currentTime.getDate()+'/'+(currentTime.getMonth()+1);
 	if(data.presence=='active' && currentHour < 12){
 		var userName = slack.getUser(data.user).name;
