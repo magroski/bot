@@ -15,7 +15,7 @@ var slack = new slackAPI({
 	'autoReconnect': true
 });
 
-slack.reqAPI('channels.join',{name:'x'},function(data){});
+//slack.reqAPI('channels.join',{name:'suporte_ti'},function(data){});
 
 // Slack on EVENT message, send data.
 slack.on('message', function(data) {
@@ -38,7 +38,7 @@ slack.on('message', function(data) {
 		switch (command[0].toLowerCase()) {
 			// If hello
 			case "help":
-				slack.sendMsg(data.channel, "`docs` Lista de comandos do Google Docs \n `help` Essa lista de comandos")
+				slack.sendMsg(data.channel, "`!docs` Lista de comandos do Google Docs \n `!help` Essa lista de comandos")
 				break;
 			case "docs":
 				slack.sendMsg(data.channel, "`Ctrl+F` Procura texto no arquivo \n"+
@@ -64,6 +64,10 @@ slack.on('message', function(data) {
 				break;
 		}
 	}
+});
+
+slack.on('channel_joined', function(data){
+	slack.sendMsg(data.channel, "Olá, sou o bot de ajuda da Talentify. Envie `!help` aqui ou em uma mensagem privada para ter acesso à minha lista de comandos")
 });
 
 //var birthdays = [];
