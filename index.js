@@ -39,7 +39,7 @@ slack.on('message', function(data) {
 		switch (command[0].toLowerCase()) {
 			// If hello
 			case "help":
-				slack.sendMsg(data.channel, "`!docs` Lista de comandos do Google Docs \n `!help` Essa lista de comandos")
+				slack.sendMsg(data.channel, "Olá, segue abaixo a lista de comandos que eu reconheço. \n `!help` Imprime essa lista de comandos \n `!docs` Imprime lista de atalhos que o Google Docs reconhece \n Digite o comando que dejsa usar:")
 				break;
 			case "docs":
 				slack.sendMsg(data.channel, "`Ctrl+F` Procura texto no arquivo \n"+
@@ -75,6 +75,7 @@ slack.on('channel_joined', function(data){
 //birthdays['lucas'] = '21/10';
 
 slack.on('presence_change', function(data){
+	console.log('mudou presença')
 	/*
 	var currentTime = new Date();
 	var currentHour = currentTime.getHours()-2;
