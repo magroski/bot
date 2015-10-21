@@ -66,7 +66,7 @@ slack.on('message', function(data) {
 	}
 });
 
-console.log(events);
+console.log(slack.events);
 
 var birthdays = [];
 birthdays['lucas'] = '21/10';
