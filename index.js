@@ -94,7 +94,7 @@ slack.on('message', function(data) {
 				dbClient.connect()
 				var query = dbClient.query("INSERT INTO reminders(username, date, reminder) values($1, $2, $3)", [userName, date, reminder]);
 				query.on('end', function() { 
-					slack.sendMsg(data.channel,"@"+userName+", seu lembrete \""+reminder"\" foi agendado para :calendar: "+date)
+					slack.sendMsg(data.channel,'@'+userName+', seu lembrete "'+reminder+'" foi agendado para :calendar: '+date)
 					dbClient.end()
 				})
 				break;
