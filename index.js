@@ -113,6 +113,7 @@ slack.on('message', function(data) {
 				var query = dbClient.query("SELECT * FROM reminders WHERE username = $1 AND seen = 0 AND date >= $2 ORDER BY date", [userName,currentDate]);
 				var results = '';
 		        query.on('row', function(row) {
+		        	console.log(row.date);
 		        	var rowDate = row.date.split('-');
 		        	var formattedDate = rowDate[2]+'/'+rowDate[1]+'/'+rowDate[0];
 					results += ':calendar:'+formattedDate+' *'+row.reminder+'*\n';
