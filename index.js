@@ -98,12 +98,13 @@ slack.on('message', function(data) {
 					slack.sendMsg(data.channel,'Ops, tem algo errado com os parametros que você me enviou.\n Para salvar um lembrete, use `!lembrar dd/mm/aaaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')		
 					return;
 				}
+				var originalDate = date;
 				date = date.split('/');
 				date = date[2]+'-'+date[1]+'-'+date[0];
 				var reminder = reminderArgs.join(' ');//Unifica os pedaços da mensagem
 				var query = dbClient.query("INSERT INTO reminders(username, date, reminder, seen) values($1, $2, $3, 0)", [userName, date, reminder]);
 				query.on('end', function() { 
-					slack.sendMsg(data.channel,'@'+userName+', seu lembrete "'+reminder+'" foi agendado para :calendar: '+date);
+					slack.sendMsg(data.channel,'@'+userName+', seu lembrete "'+reminder+'" foi agendado para :calendar: '+originalDate);
 				})
 				break; 
 			case "lembretes":
