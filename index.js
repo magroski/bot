@@ -109,8 +109,8 @@ slack.on('message', function(data) {
 			case "lembretes":
 				var userName = slack.getUser(data.user).name;
 				var currentTime = new Date();
-				var currentDate = currentTime.getFullYear+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate();
-				var query = dbClient.query("SELECT * FROM reminders WHERE username = $1 AND seen = 0 AND date >= $2", [userName,currentDate]);
+				var currentDate = currentTime.getFullYear()+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate();
+				var query = dbClient.query("SELECT * FROM reminders WHERE username = $1 AND seen = 0 AND date >= $2 ORDER BY date", [userName,currentDate]);
 				var results = '';
 		        query.on('row', function(row) {
 		        	var rowDate = row.date.split('-');
