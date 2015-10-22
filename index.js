@@ -20,9 +20,10 @@ var slack = new slackAPI({
 var connectionString = process.env.DATABASE_URL;
 var dbClient = new pg.Client(connectionString);
 dbClient.connect();
+
 pg.connect(process.env.DATABASE_URL, function(err, client) {
 	if (err) throw err;
-	console.log('Connected to postgres! Getting schemas...');
+	console.log('Connected to postgres! Getting data...');
 	client
 		.query('SELECT * FROM reminders;')
 		.on('row', function(row) {
@@ -53,7 +54,10 @@ slack.on('message', function(data) {
 		switch (command[0].toLowerCase()) {
 			// If hello
 			case "help":
-				slack.sendMsg(data.channel, "Olá, segue abaixo a lista de comandos que eu reconheço. \n `!help` Imprime essa lista de comandos \n `!docs` Imprime lista de atalhos que o Google Docs reconhece \n Digite o comando que dejsa usar:")
+				slack.sendMsg(data.channel, "Olá, segue abaixo a lista de comandos que eu reconheço."+
+											" \n `!help` Imprime essa lista de comandos"+
+											" \n `!docs` Imprime lista de atalhos que o Google Docs reconhece"+
+											" \n Digite o comando que dejsa usar:")
 				break;
 			case "docs":
 				slack.sendMsg(data.channel, "`Ctrl+F` Procura texto no arquivo \n"+
@@ -94,6 +98,8 @@ slack.on('message', function(data) {
 					slack.sendMsg(data.channel,'Ops, tem algo errado com os parametros que você me enviou.\n Para salvar um lembrete, use `!lembrar dd/mm/aaaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')		
 					return;
 				}
+				date.split('/');
+				date = date[2]+'-'+date[1]+'-'+date[0];
 				var reminder = reminderArgs.join(' ');//Unifica os pedaços da mensagem
 				var query = dbClient.query("INSERT INTO reminders(username, date, reminder) values($1, $2, $3)", [userName, date, reminder]);
 				query.on('end', function() { 
@@ -102,10 +108,12 @@ slack.on('message', function(data) {
 				break; 
 			case "lembretes":
 				var userName = slack.getUser(data.user).name;
-				var query = dbClient.query("SELECT * FROM reminders WHERE username = $1", [userName]);
+				var currentTime = new Date();
+				var currentDate = currentTime.getFullYear+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate();
+				var query = dbClient.query("SELECT * FROM reminders WHERE username = $1 AND seen = 0 AND date >= $2", [userName,currentDate]);
 				var results = '';
 		        query.on('row', function(row) {
-					results += '*'+row.date+'* '+row.reminder+'\n';
+					results += ':calendar:'+row.date+' *'+row.reminder+'*\n';
 	    	    });
 	    	    query.on('end', function() { 
 					slack.sendMsg(data.channel,results);
