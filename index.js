@@ -19,6 +19,7 @@ var slack = new slackAPI({
 
 var connectionString = process.env.DATABASE_URL;
 var dbClient = new pg.Client(connectionString);
+dbClient.connect();
 pg.connect(process.env.DATABASE_URL, function(err, client) {
 	if (err) throw err;
 	console.log('Connected to postgres! Getting schemas...');
@@ -93,20 +94,14 @@ slack.on('message', function(data) {
 					slack.sendMsg(data.channel,'Ops, tem algo errado com os parametros que você me enviou.\n Para salvar um lembrete, use `!lembrar dd/mm/aaaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')		
 					return;
 				}
-				console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ '+reminderArgs);
 				var reminder = reminderArgs.join(' ');//Unifica os pedaços da mensagem
-				console.log('222222222222222222222222222222 '+reminderArgs);
-				console.log('333333333333333333333333333333 '+reminder);
-				dbClient.connect()
 				var query = dbClient.query("INSERT INTO reminders(username, date, reminder) values($1, $2, $3)", [userName, date, reminder]);
 				query.on('end', function() { 
 					slack.sendMsg(data.channel,'@'+userName+', seu lembrete "'+reminder+'" foi agendado para :calendar: '+date);
-					dbClient.end();
 				})
 				break; 
 			case "lembretes":
 				var userName = slack.getUser(data.user).name;
-				dbClient.connect();
 				var query = dbClient.query("SELECT * FROM reminders WHERE username = $1", [userName]);
 				var results = '';
 		        query.on('row', function(row) {
@@ -114,7 +109,6 @@ slack.on('message', function(data) {
 	    	    });
 	    	    query.on('end', function() { 
 					slack.sendMsg(data.channel,results);
-					dbClient.end()
 				})
 				break;
 		}
