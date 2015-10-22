@@ -137,7 +137,7 @@ slack.on('presence_change', function(data){
 	var currentTime = new Date();
 	var currentHour = currentTime.getHours()-2;
 	var currentDate = currentTime.getDate()+'/'+(currentTime.getMonth()+1);
-	if(data.presence=='active' && currentHour < 12){
+	if(data.presence=='active'){
 		var userName = slack.getUser(data.user).name;
 		if( typeof birthdays[userName] != typeof undefined && birthdays[userName] == currentDate ){
 			//slack.sendMsg('general',':tada: Feliz aniversário @'+userName+' :cake: :balloon:');
