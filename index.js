@@ -79,6 +79,7 @@ slack.on('message', function(data) {
 			case "lembrar":
 				if(typeof command[1] == typeof undefined){
 					slack.sendMsg(data.channel,'Ops, parece que você esqueceu de algum parametro.\n Para salvar um lembrete, use `!lembrar dd/mm/aaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')
+					return;
 				}
 				var userName = slack.getUser(data.user).name;
 				var reminderArgs = command[1].split(' '); //Pega os argumentos passados na mensagem e explode por espaço em branco
@@ -86,9 +87,11 @@ slack.on('message', function(data) {
 				reminderArgs.shift(); //Remove a data do array de argumentos restantes
 				if(reminderArgs.length==0){ //Verifica se sobrou algum argumento (espera-se que sim, pois precisamos de uma mensagem)
 					slack.sendMsg(data.channel,'Ops, parece que você esqueceu de algum parametro.\n Para salvar um lembrete, use `!lembrar dd/mm/aaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')	
+					return;
 				}
 				if(date.match('[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]') == null){
 					slack.sendMsg(data.channel,'Ops, tem algo errado com os parametros que você me enviou.\n Para salvar um lembrete, use `!lembrar dd/mm/aaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')		
+					return;
 				}
 				var reminder = reminderArgs.join(' ');//Unifica os pedaços da mensagem
 				dbClient.connect()
@@ -97,7 +100,7 @@ slack.on('message', function(data) {
 					slack.sendMsg(data.channel,'@'+userName+', seu lembrete "'+reminder+'" foi agendado para :calendar: '+date)
 					dbClient.end()
 				})
-				break;
+				break; 
 			case "lembretes":
 				var userName = slack.getUser(data.user).name;
 				dbClient.connect();
