@@ -114,7 +114,7 @@ slack.on('message', function(data) {
 				var results = '';
 		        query.on('row', function(row) {
 		        	var rowDate = new Date(row.date);
-		        	var formattedDate = rowDate.getFullYear()+'/'+(rowDate.getMonth()+1)+'/'+rowDate.getDate();
+		        	var formattedDate = rowDate.getDate()+'/'+(rowDate.getMonth()+1)+'/'+rowDate.getFullYear();
 					results += ':calendar:'+formattedDate+' *'+row.reminder+'*\n';
 	    	    });
 	    	    query.on('end', function() { 
