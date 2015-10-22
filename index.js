@@ -101,7 +101,7 @@ slack.on('message', function(data) {
 				date = date.split('/');
 				date = date[2]+'-'+date[1]+'-'+date[0];
 				var reminder = reminderArgs.join(' ');//Unifica os pedaços da mensagem
-				var query = dbClient.query("INSERT INTO reminders(username, date, reminder) values($1, $2, $3)", [userName, date, reminder]);
+				var query = dbClient.query("INSERT INTO reminders(username, date, reminder, seen) values($1, $2, $3, 0)", [userName, date, reminder]);
 				query.on('end', function() { 
 					slack.sendMsg(data.channel,'@'+userName+', seu lembrete "'+reminder+'" foi agendado para :calendar: '+date);
 				})
@@ -110,7 +110,7 @@ slack.on('message', function(data) {
 				var userName = slack.getUser(data.user).name;
 				var currentTime = new Date();
 				var currentDate = currentTime.getFullYear()+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate();
-				var query = dbClient.query("SELECT * FROM reminders WHERE username = $1 AND seen = 0 AND date >= $2 ORDER BY date", [userName,currentDate]);
+				var query = dbClient.query("SELECT * FROM reminders WHERE username = $1 AND seen = 0 AND date >= $2 ORDER BY date ASC", [userName,currentDate]);
 				var results = '';
 		        query.on('row', function(row) {
 		        	console.log(row.date);
