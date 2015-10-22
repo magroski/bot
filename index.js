@@ -116,7 +116,7 @@ slack.on('message', function(data) {
 		        query.on('row', function(row) {
 		        	var rowDate = new Date(row.date);
 		        	var formattedDate = rowDate.getDate()+'/'+(rowDate.getMonth()+1)+'/'+rowDate.getFullYear();
-					results += ':calendar:'+formattedDate+' *'+row.reminder+'*\n';
+					results += ':calendar: '+formattedDate+' *'+row.reminder+'*\n';
 	    	    });
 	    	    query.on('end', function() { 
 					slack.sendMsg(data.channel,results);
@@ -130,23 +130,18 @@ slack.on('channel_joined', function(data){
 	slack.sendMsg(data.channel.id, "Olá, sou o bot de ajuda da Talentify. Envie `!help` aqui ou em uma mensagem privada para ter acesso à minha lista de comandos")
 });
 
-//var birthdays = [];
-//birthdays['lucas'] = '21/10';
+var birthdays = [];
+birthdays['lucas'] = '22/10';
 
 slack.on('presence_change', function(data){
-	console.log('mudou presença')
-	if(slack.getUser(data.user).name=='lucas'){
-		slack.sendPM(data.user,'teste de change');
-	}
-	/*
 	var currentTime = new Date();
 	var currentHour = currentTime.getHours()-2;
 	var currentDate = currentTime.getDate()+'/'+(currentTime.getMonth()+1);
 	if(data.presence=='active' && currentHour < 12){
 		var userName = slack.getUser(data.user).name;
 		if( typeof birthdays[userName] != typeof undefined && birthdays[userName] == currentDate ){
-			slack.sendMsg('general','Feliz aniversário @'+userName+' :cake:');
+			//slack.sendMsg('general',':tada: Feliz aniversário @'+userName+' :cake: :balloon:');
+			slack.sendPM(data.user,':tada: Feliz aniversário @'+userName+' :cake: :balloon:); 
 		}
 	}
-	*/
 });
