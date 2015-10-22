@@ -136,7 +136,7 @@ birthdays['lucas'] = '22/10';
 slack.on('presence_change', function(data){
 	if(data.presence=='active'){
 		var userName = slack.getUser(data.user).name;
-		var query = dbClient.query("SELECT last_seen FROM access WHERE username = $1", [username]);
+		var query = dbClient.query("SELECT last_seen FROM access WHERE username = $1", [userName]);
 		var lastSeen;
 		query.on('row',function(row){
 			lastSeen = new Date(row.last_seen)
