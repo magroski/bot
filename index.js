@@ -98,7 +98,7 @@ slack.on('message', function(data) {
 					slack.sendMsg(data.channel,'Ops, tem algo errado com os parametros que você me enviou.\n Para salvar um lembrete, use `!lembrar dd/mm/aaaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')		
 					return;
 				}
-				date.split('/');
+				date = date.split('/');
 				date = date[2]+'-'+date[1]+'-'+date[0];
 				var reminder = reminderArgs.join(' ');//Unifica os pedaços da mensagem
 				var query = dbClient.query("INSERT INTO reminders(username, date, reminder) values($1, $2, $3)", [userName, date, reminder]);
@@ -113,6 +113,8 @@ slack.on('message', function(data) {
 				var query = dbClient.query("SELECT * FROM reminders WHERE username = $1 AND seen = 0 AND date >= $2", [userName,currentDate]);
 				var results = '';
 		        query.on('row', function(row) {
+		        	var rowDate = row.date.split('-');
+		        	var formattedDate = rowDate[2]+'/'+rowDate[1]+'/'+rowDate[0];
 					results += ':calendar:'+row.date+' *'+row.reminder+'*\n';
 	    	    });
 	    	    query.on('end', function() { 
