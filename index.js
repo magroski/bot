@@ -132,7 +132,8 @@ slack.on('channel_joined', function(data){
 
 var birthdays = [];
 birthdays['lucas'] = '22/10';
-
+//Adicionar um banco de dados para saber qual o ultimo dia que a pessoa fez login, se ja fez hoje, suprimir a mensagem
+//Adicionar no banco uma linha com todos os funcionarios da empresa
 slack.on('presence_change', function(data){
 	var currentTime = new Date();
 	var currentHour = currentTime.getHours()-2;
