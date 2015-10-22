@@ -138,7 +138,7 @@ slack.on('presence_change', function(data){
 		var userName = slack.getUser(data.user).name;
 		var query = dbClient.query("SELECT last_seen FROM access WHERE username = $1", [username]);
 		var lastSeen;
-		query.on('row',funtion(row){
+		query.on('row',function(row){
 			lastSeen = new Date(row.last_seen)
 		});
 		query.on('end',function(){
