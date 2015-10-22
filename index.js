@@ -77,7 +77,7 @@ slack.on('message', function(data) {
 											"`Ctrl + Espaço` Remover a formatação")
 				break;
 			case "lembrar":
-				if(typeof command[1] == typeof undefined || ){
+				if(typeof command[1] == typeof undefined){
 					slack.sendMsg(data.channel,'Ops, parece que você esqueceu de algum parametro.\n Para salvar um lembrete, use `!lembrar dd/mm/aaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')
 				}
 				var userName = slack.getUser(data.user).name;
