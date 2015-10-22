@@ -132,17 +132,26 @@ slack.on('channel_joined', function(data){
 
 var birthdays = [];
 birthdays['lucas'] = '22/10';
-//Adicionar um banco de dados para saber qual o ultimo dia que a pessoa fez login, se ja fez hoje, suprimir a mensagem
-//Adicionar no banco uma linha com todos os funcionarios da empresa
+
 slack.on('presence_change', function(data){
-	var currentTime = new Date();
-	var currentHour = currentTime.getHours()-2;
-	var currentDate = currentTime.getDate()+'/'+(currentTime.getMonth()+1);
 	if(data.presence=='active'){
 		var userName = slack.getUser(data.user).name;
-		if( typeof birthdays[userName] != typeof undefined && birthdays[userName] == currentDate ){
-			//slack.sendMsg('general',':tada: Feliz aniversário @'+userName+' :cake: :balloon:');
-			slack.sendPM(data.user,':tada: Feliz aniversário @'+userName+' :cake: :balloon:'); 
-		}
+		var query = dbClient.query("SELECT last_seen FROM access WHERE username = $1", [username]);
+		var lastSeen;
+		query.on('row',funtion(row){
+			lastSeen = new Date(row.last_seen)
+		});
+		query.on('end',function(){
+			var currentTime = new Date();
+			var currentDayMonth = currentTime.getDate()+'/'+(currentTime.getMonth()+1);
+			var lastSeenDayMonth = lastSeen.getDate()+'/'+(lastSeen.getMonth()+1);
+			if(lastSeenDayMonth != currentDayMonth){
+				if(typeof birthdays[userName] != typeof undefined && birthdays[userName] == currentDayMonth){
+					slack.sendPM(data.user,':tada: Feliz aniversário @'+userName+' :cake: :balloon:');
+				}
+				var currentDate = currentTime.getFullYear()+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate();
+				var updateQuery = dbClient.query("UPDATE access SET last_seen = $1 WHERE username = $2", [currentDate,userName]);
+			}
+		});
 	}
 });
