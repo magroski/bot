@@ -113,9 +113,8 @@ slack.on('message', function(data) {
 				var query = dbClient.query("SELECT * FROM reminders WHERE username = $1 AND seen = 0 AND date >= $2 ORDER BY date ASC", [userName,currentDate]);
 				var results = '';
 		        query.on('row', function(row) {
-		        	console.log(row.date);
-		        	var rowDate = row.date.split('-');
-		        	var formattedDate = rowDate[2]+'/'+rowDate[1]+'/'+rowDate[0];
+		        	var rowDate = new Date(row.date);
+		        	var formattedDate = rowDate.getFullYear()+'/'+(rowDate.getMonth()+1)+'/'+rowDate.getDate();
 					results += ':calendar:'+formattedDate+' *'+row.reminder+'*\n';
 	    	    });
 	    	    query.on('end', function() { 
