@@ -115,7 +115,7 @@ slack.on('message', function(data) {
 		        query.on('row', function(row) {
 		        	var rowDate = row.date.split('-');
 		        	var formattedDate = rowDate[2]+'/'+rowDate[1]+'/'+rowDate[0];
-					results += ':calendar:'+row.date+' *'+row.reminder+'*\n';
+					results += ':calendar:'+formattedDate+' *'+row.reminder+'*\n';
 	    	    });
 	    	    query.on('end', function() { 
 					slack.sendMsg(data.channel,results);
