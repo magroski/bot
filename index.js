@@ -78,7 +78,7 @@ slack.on('message', function(data) {
 				break;
 			case "lembrar":
 				if(typeof command[1] == typeof undefined){
-					slack.sendMsg(data.channel,'Ops, parece que você esqueceu de algum parametro.\n Para salvar um lembrete, use `!lembrar dd/mm/aaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')
+					slack.sendMsg(data.channel,'Ops, parece que você esqueceu de algum parametro.\n Para salvar um lembrete, use `!lembrar dd/mm/aaaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')
 					return;
 				}
 				var userName = slack.getUser(data.user).name;
@@ -86,14 +86,16 @@ slack.on('message', function(data) {
 				var date = reminderArgs[0]; //Pega o primeiro argumento que é a data
 				reminderArgs.shift(); //Remove a data do array de argumentos restantes
 				if(reminderArgs.length==0){ //Verifica se sobrou algum argumento (espera-se que sim, pois precisamos de uma mensagem)
-					slack.sendMsg(data.channel,'Ops, parece que você esqueceu de algum parametro.\n Para salvar um lembrete, use `!lembrar dd/mm/aaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')	
+					slack.sendMsg(data.channel,'Ops, parece que você esqueceu de algum parametro.\n Para salvar um lembrete, use `!lembrar dd/mm/aaaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')	
 					return;
 				}
 				if(date.match('[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]') == null){
-					slack.sendMsg(data.channel,'Ops, tem algo errado com os parametros que você me enviou.\n Para salvar um lembrete, use `!lembrar dd/mm/aaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')		
+					slack.sendMsg(data.channel,'Ops, tem algo errado com os parametros que você me enviou.\n Para salvar um lembrete, use `!lembrar dd/mm/aaaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')		
 					return;
 				}
+				console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ '+reminderArgs);
 				var reminder = reminderArgs.join(' ');//Unifica os pedaços da mensagem
+				console.log('222222222222222222222222222222 '+reminderArgs);
 				dbClient.connect()
 				var query = dbClient.query("INSERT INTO reminders(username, date, reminder) values($1, $2, $3)", [userName, date, reminder]);
 				query.on('end', function() { 
