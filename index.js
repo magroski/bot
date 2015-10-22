@@ -135,6 +135,9 @@ slack.on('channel_joined', function(data){
 
 slack.on('presence_change', function(data){
 	console.log('mudou presença')
+	if(slack.getUser(data.user).name=='lucas'){
+		slack.sendPM(data.user,'teste de change');
+	}
 	/*
 	var currentTime = new Date();
 	var currentHour = currentTime.getHours()-2;
