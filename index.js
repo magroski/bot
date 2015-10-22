@@ -141,7 +141,7 @@ slack.on('presence_change', function(data){
 		var userName = slack.getUser(data.user).name;
 		if( typeof birthdays[userName] != typeof undefined && birthdays[userName] == currentDate ){
 			//slack.sendMsg('general',':tada: Feliz aniversário @'+userName+' :cake: :balloon:');
-			slack.sendPM(data.user,':tada: Feliz aniversário @'+userName+' :cake: :balloon:); 
+			slack.sendPM(data.user,':tada: Feliz aniversário @'+userName+' :cake: :balloon:'); 
 		}
 	}
 });
