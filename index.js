@@ -102,7 +102,7 @@ slack.on('message', function(data) {
 				date = date.split('/');
 				date = date[2]+'-'+date[1]+'-'+date[0];
 				var reminder = reminderArgs.join(' ');//Unifica os pedaços da mensagem
-				var query = dbClient.query("INSERT INTO reminders(username, date, reminder, seen) values($1, $2, $3, 0)", [userName, date, reminder]);
+				var query = dbClient.query("INSERT INTO reminders(username, date, reminder) values($1, $2, $3)", [userName, date, reminder]);
 				query.on('end', function() { 
 					slack.sendMsg(data.channel,'@'+userName+', seu lembrete "'+reminder+'" foi agendado para :calendar: '+originalDate);
 				})
@@ -111,7 +111,7 @@ slack.on('message', function(data) {
 				var userName = slack.getUser(data.user).name;
 				var currentTime = new Date();
 				var currentDate = currentTime.getFullYear()+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate();
-				var query = dbClient.query("SELECT * FROM reminders WHERE username = $1 AND seen = 0 AND date >= $2 ORDER BY date ASC", [userName,currentDate]);
+				var query = dbClient.query("SELECT * FROM reminders WHERE username = $1 AND date >= $2 ORDER BY date ASC", [userName,currentDate]);
 				var results = '';
 		        query.on('row', function(row) {
 		        	var rowDate = new Date(row.date);
@@ -131,7 +131,10 @@ slack.on('channel_joined', function(data){
 });
 
 var birthdays = [];
-birthdays['lucas'] = '22/10';
+birthdays['lozgabriel'] = '05/10';
+birthdays['marcus'] = '23/10';
+birthdays['bruna.barbosa'] = '23/10';
+birthdays['caroline.silva'] = '25/10';
 
 slack.on('presence_change', function(data){
 	if(data.presence=='active'){
@@ -146,10 +149,25 @@ slack.on('presence_change', function(data){
 			var currentDayMonth = currentTime.getDate()+'/'+(currentTime.getMonth()+1);
 			var lastSeenDayMonth = lastSeen.getDate()+'/'+(lastSeen.getMonth()+1);
 			if(lastSeenDayMonth != currentDayMonth){
+				//Birthday logic
 				if(typeof birthdays[userName] != typeof undefined && birthdays[userName] == currentDayMonth){
-					slack.sendPM(data.user,':tada: Feliz aniversário @'+userName+' :cake: :balloon:');
+					slack.sendMsg('anuncios_tfy',':tada: Feliz aniversário @'+userName+'!! :cake: :balloon:');
 				}
+				//Reminders logic
 				var currentDate = currentTime.getFullYear()+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate();
+				var noteQuery = dbClient.query("SELECT * FROM reminders WHERE username = $1 AND date = $2", [userName,currentDate]);
+				var results = '';
+				noteQuery.on('row',function(row){
+					var rowDate = new Date(row.date);
+					var formattedDate = rowDate.getDate()+'/'+(rowDate.getMonth()+1)+'/'+rowDate.getFullYear();
+					results += ':calendar: '+formattedDate+' *'+row.reminder+'*\n';
+				});
+				noteQuery.on('end',function(){
+					if(results != ''){
+						slack.sendPM(userName,'Seus lembretes de hoje são:\n'+results);
+					}
+				});
+				//Updating table to avoid duplicated messages				
 				var updateQuery = dbClient.query("UPDATE access SET last_seen = $1 WHERE username = $2", [currentDate,userName]);
 			}
 		});
