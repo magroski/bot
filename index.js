@@ -96,11 +96,12 @@ slack.on('message', function(data) {
 				console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ '+reminderArgs);
 				var reminder = reminderArgs.join(' ');//Unifica os pedaços da mensagem
 				console.log('222222222222222222222222222222 '+reminderArgs);
+				console.log('333333333333333333333333333333 '+reminder);
 				dbClient.connect()
 				var query = dbClient.query("INSERT INTO reminders(username, date, reminder) values($1, $2, $3)", [userName, date, reminder]);
 				query.on('end', function() { 
-					slack.sendMsg(data.channel,'@'+userName+', seu lembrete "'+reminder+'" foi agendado para :calendar: '+date)
-					dbClient.end()
+					slack.sendMsg(data.channel,'@'+userName+', seu lembrete "'+reminder+'" foi agendado para :calendar: '+date);
+					dbClient.end();
 				})
 				break; 
 			case "lembretes":
