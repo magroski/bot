@@ -155,7 +155,7 @@ slack.on('presence_change', function(data){
 			if(lastSeenDayMonth != currentDayMonth){
 				//Birthday logic
 				if(typeof birthdays[userName] != typeof undefined && birthdays[userName] == currentDayMonth){
-					slack.sendMsg('anuncios_tfy',':tada: Feliz aniversário @'+userName+'!! :cake: :balloon:');
+					slack.sendMsg('#anuncios_tfy',':tada: Feliz aniversário @'+userName+'!! :cake: :balloon:');
 				}
 				//Reminders logic
 				var currentDate = currentTime.getFullYear()+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate();
