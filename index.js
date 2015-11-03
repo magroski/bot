@@ -199,16 +199,14 @@ slack.on('presence_change', function(data){
 				//Updating table to avoid duplicated messages
 				dbClient.query("UPDATE access SET last_seen = $1 WHERE username = $2", [currentDate,userName]);
 			}
-			//Logica de comunicados
+			//Bulletin logic
 			if(userName=='lucas' || userName=='kelly' || userName=='thais'){
-				var tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
-				var tomorrow = tomorrow.getFullYear()+'-'+(tomorrow.getMonth()+1)+'-'+tomorrow.getDate();
-				var bulletinQuery = dbClient.query("SELECT * FROM bulletin WHERE date = $1 AND sent = 0", [tomorrow]);
+				var bulletinQuery = dbClient.query("SELECT * FROM bulletin WHERE date = $1 AND sent = 0", [currentDate]);
 				bulletinQuery.on('row',function(row){
 					slack.sendMsg('C03GNTC0P',row.reminder);
 				});
 				bulletinQuery.on('end',function(){
-					dbClient.query('UPDATE bulletin SET sent = 1 WHERE date = $1', [tomorrow]);
+					dbClient.query('UPDATE bulletin SET sent = 1 WHERE date = $1', [currentDate]);
 				});
 			}
 		});
