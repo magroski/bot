@@ -57,7 +57,7 @@ slack.on('message', function(data) {
 				slack.sendMsg(data.channel, "Olá, segue abaixo a lista de comandos que eu reconheço."+
 											" \n `!help` Imprime essa lista de comandos"+
 											" \n `!docs` Imprime lista de atalhos que o Google Docs reconhece"+
-											" \n `!lembrar` Salva um lembrete pessoal com data de alarme. Usar no formato `!lembrar dd/mm/aaaa mensagem`"+
+											" \n `!lembrar` Salva um lembrete pessoal. Usar no formato `!lembrar dd/mm/aaaa mensagem`. Seus lembretes serão enviados automaticamente na data indicada"+
 											" \n `!lembretes` Exibe a sua lista pessoal de lembretes futuros"+
 											" \n Estou disponível no canal #anuncios_tfy, #suporte_ti e através de chat privado (Direct Messages no menu esquerdo)"+
 											" \n Lembre que sempre responderei na mesma tela onde fui chamado."+
@@ -108,7 +108,7 @@ slack.on('message', function(data) {
 				var reminder = reminderArgs.join(' ');//Unifica os pedaços da mensagem
 				var query = dbClient.query("INSERT INTO reminders(username, date, reminder) values($1, $2, $3)", [userName, date, reminder]);
 				query.on('end', function() { 
-					slack.sendMsg(data.channel,'@'+userName+', seu lembrete "'+reminder+'" foi agendado para :calendar: '+originalDate);
+					slack.sendMsg(data.channel,'@'+userName+', seu lembrete "'+reminder+'" foi agendado para :calendar: '+originalDate+'. Irei te lembrar no momento que você ficar online nessa data.');
 				})
 				break; 
 			case "lembretes":
