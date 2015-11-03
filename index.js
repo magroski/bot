@@ -95,11 +95,11 @@ slack.on('message', function(data) {
 				var date = reminderArgs[0]; //Pega o primeiro argumento que é a data
 				reminderArgs.shift(); //Remove a data do array de argumentos restantes
 				if(reminderArgs.length==0){ //Verifica se sobrou algum argumento (espera-se que sim, pois precisamos de uma mensagem)
-					slack.sendMsg(data.channel,'Ops, parece que você esqueceu de algum parametro.\n Para salvar um lembrete, use `!lembrar dd/mm/aaaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')	
+					slack.sendMsg(data.channel,'Ops, parece que você esqueceu de algum parametro.\n Para salvar um lembrete, use `!lembrar dd/mm/aaaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')
 					return;
 				}
 				if(date.match('[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]') == null){
-					slack.sendMsg(data.channel,'Ops, tem algo errado com os parametros que você me enviou.\n Para salvar um lembrete, use `!lembrar dd/mm/aaaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')		
+					slack.sendMsg(data.channel,'Ops, tem algo errado com os parametros que você me enviou.\n Para salvar um lembrete, use `!lembrar dd/mm/aaaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')
 					return;
 				}
 				var originalDate = date;
@@ -107,10 +107,10 @@ slack.on('message', function(data) {
 				date = date[2]+'-'+date[1]+'-'+date[0];
 				var reminder = reminderArgs.join(' ');//Unifica os pedaços da mensagem
 				var query = dbClient.query("INSERT INTO reminders(username, date, reminder) values($1, $2, $3)", [userName, date, reminder]);
-				query.on('end', function() { 
+				query.on('end', function() {
 					slack.sendMsg(data.channel,'@'+userName+', seu lembrete "'+reminder+'" foi agendado para :calendar: '+originalDate+'. Irei te lembrar no momento que você ficar online nessa data.');
 				})
-				break; 
+				break;
 			case "lembretes":
 				var userName = slack.getUser(data.user).name;
 				var currentTime = new Date();
@@ -122,8 +122,33 @@ slack.on('message', function(data) {
 		        	var formattedDate = rowDate.getDate()+'/'+(rowDate.getMonth()+1)+'/'+rowDate.getFullYear();
 					results += ':calendar: '+formattedDate+' *'+row.reminder+'*\n';
 	    	    });
-	    	    query.on('end', function() { 
+	    	    query.on('end', function() {
 					slack.sendMsg(data.channel,results);
+				})
+				break;
+			case "comunicado":
+				if(typeof command[1] == typeof undefined){
+					slack.sendMsg(data.channel,'Ops, parece que você esqueceu de algum parametro.\n Para salvar um comunicado, use `!comunicado dd/mm/aaaa texto do comunicado`')
+					return;
+				}
+				var reminderArgs = command[1].split(' '); //Pega os argumentos passados na mensagem e explode por espaço em branco
+				var date = reminderArgs[0]; //Pega o primeiro argumento que é a data
+				reminderArgs.shift(); //Remove a data do array de argumentos restantes
+				if(reminderArgs.length==0){ //Verifica se sobrou algum argumento (espera-se que sim, pois precisamos de uma mensagem)
+					slack.sendMsg(data.channel,'Ops, parece que você esqueceu de algum parametro.\n Para salvar um comunicado, use `!comunicado dd/mm/aaaa texto do comunicado`')
+					return;
+				}
+				if(date.match('[0-9][0-9]/[0-9][0-9]/[0-9][0-9][0-9][0-9]') == null){
+					slack.sendMsg(data.channel,'Ops, tem algo errado com os parametros que você me enviou.\n Para salvar um comunicado, use `!comunicado dd/mm/aaaa texto do comunicado`')
+					return;
+				}
+				var originalDate = date;
+				date = date.split('/');
+				date = date[2]+'-'+date[1]+'-'+date[0];
+				var reminder = reminderArgs.join(' ');//Unifica os pedaços da mensagem
+				var query = dbClient.query("INSERT INTO bulletin(date, reminder, sent) values($1, $2, $3)", [date, reminder, 0]);
+				query.on('end', function() {
+					slack.sendMsg(data.channel,'O comunicado "'+reminder+'" foi agendado para :calendar: '+originalDate);
 				})
 				break;
 		}
@@ -171,8 +196,20 @@ slack.on('presence_change', function(data){
 						slack.sendPM(userName,'Seus lembretes de hoje são:\n'+results);
 					}
 				});
-				//Updating table to avoid duplicated messages				
-				var updateQuery = dbClient.query("UPDATE access SET last_seen = $1 WHERE username = $2", [currentDate,userName]);
+				//Updating table to avoid duplicated messages
+				dbClient.query("UPDATE access SET last_seen = $1 WHERE username = $2", [currentDate,userName]);
+			}
+			//Logica de comunicados
+			if(userName=='lucas' || userName=='kelly' || userName=='thais'){
+				var tomorrow = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+				var tomorrow = tomorrow.getFullYear()+'-'+(tomorrow.getMonth()+1)+'-'+tomorrow.getDate();
+				var bulletinQuery = dbClient.query("SELECT * FROM bulletin WHERE date = $1 AND sent = 0", [tomorrow]);
+				bulletinQuery.on('row',function(row){
+					slack.sendMsg('C03GNTC0P',row.reminder);
+				});
+				bulletinQuery.on('end',function{
+					dbClient.query('UPDATE bulletin SET sent = 1 WHERE date = $1', [tomorrow]);
+				});
 			}
 		});
 	}
