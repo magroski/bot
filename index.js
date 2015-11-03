@@ -156,7 +156,7 @@ slack.on('message', function(data) {
 });
 
 slack.on('channel_joined', function(data){
-	slack.sendMsg(data.channel.id, "Olá, sou o bot de ajuda da Talentify. Envie `!help` aqui ou em uma mensagem privada para ter acesso à minha lista de comandos")
+	slack.sendMsg(data.channel.id, "Olá, sou o bot da Talentify. Envie `!help` aqui ou em uma mensagem privada para ter acesso à minha lista de comandos")
 });
 
 var birthdays = [];
@@ -207,7 +207,7 @@ slack.on('presence_change', function(data){
 				bulletinQuery.on('row',function(row){
 					slack.sendMsg('C03GNTC0P',row.reminder);
 				});
-				bulletinQuery.on('end',function{
+				bulletinQuery.on('end',function(){
 					dbClient.query('UPDATE bulletin SET sent = 1 WHERE date = $1', [tomorrow]);
 				});
 			}
