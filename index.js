@@ -228,7 +228,7 @@ slack.on('presence_change', function(data){
 		//Temporary code
 		var insertIdQuery = dbClient.query("SELECT * FROM access WHERE username = $1", [userName]);
 		insertIdQuery.on('row',function(row){
-			var tempQuery = dbClient.query("UPDATE access SET userid = $1 WHERE username = $2", [data.user, username]);
+			var tempQuery = dbClient.query("UPDATE access SET userid = $1 WHERE username = $2", [data.user, userName]);
 		})
 		//End temporary code
 		var query = dbClient.query("SELECT last_seen FROM access WHERE username = $1", [userName]);
