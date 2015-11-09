@@ -117,7 +117,7 @@ slack.on('message', function(data) {
 					var option			= reminderArgs[0];
 					if( (option == 'apagar') && (typeof reminderArgs[1] != typeof undefined) ){
 						var reminderId = reminderArgs[1];
-						if( parseInt(reminderId,10) != NaN ){
+						if( reminderId > 0){
 							var deleteQuery = dbClient.query("DELETE FROM reminders WHERE userid = $1 AND id = $2", [data.user, reminderId]);
 							deleteQuery.on('end', function(){
 								slack.sendMsg(data.channel,'Lembrete deletado com sucesso!');
