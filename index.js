@@ -58,8 +58,8 @@ slack.on('message', function(data) {
 											" \n `!help` Imprime essa lista de comandos"+
 											" \n `!docs` Imprime lista de atalhos que o Google Docs reconhece"+
 											" \n `!lembrar` Salva um lembrete pessoal. Usar no formato `!lembrar dd/mm/aaaa mensagem`. Seus lembretes serão enviados automaticamente na data indicada"+
-											" \n `!lembretes` Exibe a sua lista pessoal de lembretes futuros"+
-											" \n Estou disponível no canal #anuncios_tfy, #suporte_ti e através de chat privado (Direct Messages no menu esquerdo)"+
+											" \n `!lembretes` Exibe a sua lista pessoal de lembretes futuros. `!lembretes apagar` permite apagar um lembrete específico"+
+											" \n Estou disponível nos canais #anuncios_tfy, #suporte_ti e através de chat privado (Direct Messages no menu esquerdo)"+
 											" \n Lembre que sempre responderei na mesma tela onde fui chamado."+
 											" \n Digite o comando que deseja usar:")
 				break;
@@ -225,24 +225,30 @@ birthdays['jessica.dias']	= '25/11';
 slack.on('presence_change', function(data){
 	if(data.presence=='active'){
 		var userName = slack.getUser(data.user).name;
+		//Temporary code
+		var insertIdQuery = dbClient.query("SELECT * FROM access WHERE username = $1", [userName]);
+		insertIdQuery.on('row',function(row){
+			var tempQuery = dbClient.query("UPDATE access SET userid = $1 WHERE username = $2", [data.user, username]);
+		})
+		//End temporary code
 		var query = dbClient.query("SELECT last_seen FROM access WHERE username = $1", [userName]);
 		var lastSeen;
 		query.on('row',function(row){
 			lastSeen = new Date(row.last_seen)
 		});
 		query.on('end',function(){
-			var currentTime = new Date();
-			var currentDayMonth = currentTime.getDate()+'/'+(currentTime.getMonth()+1);
-			var lastSeenDayMonth = lastSeen.getDate()+'/'+(lastSeen.getMonth()+1);
+			var currentTime			= new Date();
+			var currentDayMonth		= currentTime.getDate()+'/'+(currentTime.getMonth()+1);
+			var lastSeenDayMonth	= lastSeen.getDate()+'/'+(lastSeen.getMonth()+1);
 			if(lastSeenDayMonth != currentDayMonth){
 				//Birthday logic
 				if(typeof birthdays[userName] != typeof undefined && birthdays[userName] == currentDayMonth){
 					slack.sendMsg('C03GNTC0P',':tada: Feliz aniversário @'+userName+'!! :cake: :balloon:');
 				}
 				//Reminders logic
-				var currentDate = currentTime.getFullYear()+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate();
-				var noteQuery = dbClient.query("SELECT * FROM reminders WHERE username = $1 AND date = $2", [userName,currentDate]);
-				var results = '';
+				var currentDate	= currentTime.getFullYear()+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate();
+				var noteQuery	= dbClient.query("SELECT * FROM reminders WHERE userid = $1 AND date = $2", [data.user,currentDate]);
+				var results		= '';
 				noteQuery.on('row',function(row){
 					var rowDate = new Date(row.date);
 					var formattedDate = rowDate.getDate()+'/'+(rowDate.getMonth()+1)+'/'+rowDate.getFullYear();
@@ -250,7 +256,7 @@ slack.on('presence_change', function(data){
 				});
 				noteQuery.on('end',function(){
 					if(results != ''){
-						slack.sendPM(userName,'Seus lembretes de hoje são:\n'+results);
+						slack.sendPM(data.user,'Seus lembretes de hoje são:\n'+results);
 					}
 				});
 				//Updating table to avoid duplicated messages
