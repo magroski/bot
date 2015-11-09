@@ -106,25 +106,43 @@ slack.on('message', function(data) {
 				date = date.split('/');
 				date = date[2]+'-'+date[1]+'-'+date[0];
 				var reminder = reminderArgs.join(' ');//Unifica os pedaços da mensagem
-				var query = dbClient.query("INSERT INTO reminders(username, date, reminder) values($1, $2, $3)", [userName, date, reminder]);
+				var query = dbClient.query("INSERT INTO reminders(userid, username, date, reminder) values($1, $2, $3, $4)", [data.user, userName, date, reminder]);
 				query.on('end', function() {
 					slack.sendMsg(data.channel,'@'+userName+', seu lembrete "'+reminder+'" foi agendado para :calendar: '+originalDate+'. Irei te lembrar no momento que você ficar online nessa data.');
 				})
 				break;
 			case "lembretes":
-				var userName = slack.getUser(data.user).name;
-				var currentTime = new Date();
-				var currentDate = currentTime.getFullYear()+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate();
-				var query = dbClient.query("SELECT * FROM reminders WHERE username = $1 AND date >= $2 ORDER BY date ASC", [userName,currentDate]);
-				var results = '';
-		        query.on('row', function(row) {
-		        	var rowDate = new Date(row.date);
-		        	var formattedDate = rowDate.getDate()+'/'+(rowDate.getMonth()+1)+'/'+rowDate.getFullYear();
-					results += ':calendar: '+formattedDate+' *'+row.reminder+'*\n';
-	    	    });
-	    	    query.on('end', function() {
-					slack.sendMsg(data.channel,results);
-				})
+				if(typeof command[1] != typeof undefined){ //Existem parametros
+					var reminderArgs	= command[1].split(' ');
+					var option			= reminderArgs[0];
+					if( (option == 'apagar') && (typeof reminderArgs[1] != typeof undefined) ){
+						var reminderId = reminderArgs[1];
+						if( parseInt(reminderId) != NaN ){
+							var deleteQuery = dbClient.query("DELETE FROM reminders WHERE userid = $1 AND id = $2", [data.user, reminderId]);
+							deleteQuery.on('end', function(){
+								slack.sendMsg(data.channel,'Lembrete deletado com sucesso!');
+							})
+						}
+					} else {
+						slack.sendMsg(data.channel,'Ops, parece que você passou algum parametro errado.\n Use `!lembretes` para visualizar seus lembretes ou `!lembretes apagar id` para apagar um lembrete salvo')
+						return;		
+					}
+				} else {
+					var userName	= slack.getUser(data.user).name;
+					var currentTime	= new Date();
+					var currentDate	= currentTime.getFullYear()+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate();
+					var query		= dbClient.query("SELECT * FROM reminders WHERE username = $1 AND date >= $2 ORDER BY date ASC", [userName,currentDate]);
+					var results		= '';
+					query.on('row', function(row) {
+						var rowDate = new Date(row.date);
+						var formattedDate = rowDate.getDate()+'/'+(rowDate.getMonth()+1)+'/'+rowDate.getFullYear();
+						results += 'ID('+row.id+') :calendar: '+formattedDate+' *'+row.reminder+'*\n';
+					});
+					results += 'Para deletar um lembrete, envie `!lembretes apagar id`. Exemplo: `!lembretes apagar 5` para apagar o lembrete de ID 5.\n';
+					query.on('end', function() {
+						slack.sendMsg(data.channel,results);
+					})
+				}
 				break;
 			case "comunicado":
 				if(typeof command[1] == typeof undefined){
@@ -160,11 +178,11 @@ slack.on('channel_joined', function(data){
 });
 
 var birthdays = [];
-birthdays['lozgabriel'] = '05/10';
-birthdays['marcus'] = '23/10';
-birthdays['bruna.barbosa'] = '23/10';
-birthdays['caroline.silva'] = '25/10';
-birthdays['jessica.dias'] = '25/11';
+birthdays['lozgabriel']		= '05/10';
+birthdays['marcus']			= '23/10';
+birthdays['bruna.barbosa']	= '23/10';
+birthdays['caroline.silva']	= '25/10';
+birthdays['jessica.dias']	= '25/11';
 
 slack.on('presence_change', function(data){
 	if(data.presence=='active'){
