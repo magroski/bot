@@ -122,6 +122,9 @@ slack.on('message', function(data) {
 							deleteQuery.on('end', function(){
 								slack.sendMsg(data.channel,'Lembrete deletado com sucesso!');
 							})
+						} else {
+							slack.sendMsg(data.channel,'Ops, parece que você passou algum parametro errado.\n Use `!lembretes` para visualizar seus lembretes ou `!lembretes apagar id` para apagar um lembrete salvo')
+							return;		
 						}
 					} else {
 						slack.sendMsg(data.channel,'Ops, parece que você passou algum parametro errado.\n Use `!lembretes` para visualizar seus lembretes ou `!lembretes apagar id` para apagar um lembrete salvo')
@@ -168,6 +171,41 @@ slack.on('message', function(data) {
 				query.on('end', function() {
 					slack.sendMsg(data.channel,'O comunicado "'+reminder+'" foi agendado para :calendar: '+originalDate);
 				})
+				break;
+			case "comunicados":
+				if(typeof command[1] != typeof undefined){ //Existem parametros
+					var reminderArgs	= command[1].split(' ');
+					var option			= reminderArgs[0];
+					if( (option == 'apagar') && (typeof reminderArgs[1] != typeof undefined) ){
+						var reminderId = reminderArgs[1];
+						if( reminderId > 0){
+							var deleteQuery = dbClient.query("DELETE FROM bulletin WHERE id = $1", [reminderId]);
+							deleteQuery.on('end', function(){
+								slack.sendMsg(data.channel,'Comunicado deletado com sucesso!');
+							})
+						} else {
+							slack.sendMsg(data.channel,'Ops, parece que você passou algum parametro errado.\n Use `!comunicados` para visualizar os comunicados agengados ou `!comunicados apagar id` para apagar um comunicado especifico')
+							return;		
+						}
+					} else {
+						slack.sendMsg(data.channel,'Ops, parece que você passou algum parametro errado.\n Use `!comunicados` para visualizar os comunicados agengados ou `!comunicados apagar id` para apagar um comunicado especifico')
+						return;		
+					}
+				} else {
+					var currentTime	= new Date();
+					var currentDate	= currentTime.getFullYear()+'-'+(currentTime.getMonth()+1)+'-'+currentTime.getDate();
+					var query		= dbClient.query("SELECT * FROM bulletin WHERE date >= $1 ORDER BY date ASC", [currentDate]);
+					var results		= '';
+					query.on('row', function(row) {
+						var rowDate = new Date(row.date);
+						var formattedDate = rowDate.getDate()+'/'+(rowDate.getMonth()+1)+'/'+rowDate.getFullYear();
+						results += 'ID('+row.id+') :calendar: '+formattedDate+' *'+row.reminder+'*\n';
+					});
+					query.on('end', function() {
+						results += 'Para deletar um comunicado, envie `!comunicados apagar id`.\nExemplo: `!comunicados apagar 5` para apagar o comunicado de ID 5.\n';
+						slack.sendMsg(data.channel,results);
+					})
+				}
 				break;
 		}
 	}
