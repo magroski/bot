@@ -108,7 +108,7 @@ slack.on('message', function(data) {
 				var reminder = reminderArgs.join(' ');//Unifica os pedaços da mensagem
 				var query = dbClient.query("INSERT INTO reminders(userid, username, date, reminder) values($1, $2, $3, $4)", [data.user, userName, date, reminder]);
 				query.on('end', function() {
-					slack.sendMsg(data.channel,'@'+userName+', seu lembrete "'+reminder+'" foi agendado para :calendar: '+originalDate+'. Irei te lembrar no momento que você ficar online nessa data.');
+					slack.sendMsg(data.channel,'@'+userName+', seu lembrete "'+reminder+'" foi agendado para :calendar: '+originalDate+'.\n Irei te lembrar no momento que você ficar online nessa data.');
 				})
 				break;
 			case "lembretes":
@@ -117,7 +117,7 @@ slack.on('message', function(data) {
 					var option			= reminderArgs[0];
 					if( (option == 'apagar') && (typeof reminderArgs[1] != typeof undefined) ){
 						var reminderId = reminderArgs[1];
-						if( parseInt(reminderId) != NaN ){
+						if( parseInt(reminderId,10) != NaN ){
 							var deleteQuery = dbClient.query("DELETE FROM reminders WHERE userid = $1 AND id = $2", [data.user, reminderId]);
 							deleteQuery.on('end', function(){
 								slack.sendMsg(data.channel,'Lembrete deletado com sucesso!');
@@ -138,8 +138,8 @@ slack.on('message', function(data) {
 						var formattedDate = rowDate.getDate()+'/'+(rowDate.getMonth()+1)+'/'+rowDate.getFullYear();
 						results += 'ID('+row.id+') :calendar: '+formattedDate+' *'+row.reminder+'*\n';
 					});
-					results += 'Para deletar um lembrete, envie `!lembretes apagar id`. Exemplo: `!lembretes apagar 5` para apagar o lembrete de ID 5.\n';
 					query.on('end', function() {
+						results += 'Para deletar um lembrete, envie `!lembretes apagar id`.\nExemplo: `!lembretes apagar 5` para apagar o lembrete de ID 5.\n';
 						slack.sendMsg(data.channel,results);
 					})
 				}
