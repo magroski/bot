@@ -102,10 +102,12 @@ slack.on('message', function(data) {
 					slack.sendMsg(data.channel,'Ops, tem algo errado com os parametros que você me enviou.\n Para salvar um lembrete, use `!lembrar dd/mm/aaaa texto do lembrete`\n Para visualizar seus lembretes salvos, use `!lembretes`')
 					return;
 				}
-				var originalDate = date;
-				date = date.split('/');
-				date = date[2]+'-'+date[1]+'-'+date[0];
-				var reminder = reminderArgs.join(' ');//Unifica os pedaços da mensagem
+				var originalDate	= date;
+				date				= date.split('/');
+				date				= date[2]+'-'+date[1]+'-'+date[0];
+				var reminder	= reminderArgs.join(' ');//Unifica os pedaços da mensagem
+				var regExp		= /\<([^> ]+)\>/g; //Regular expression to identify links
+				reminder		= reminder.replace(regExp,function(x){ return x.substring(1,x.le☺ngth-1); });
 				var query = dbClient.query("INSERT INTO reminders(userid, username, date, reminder) values($1, $2, $3, $4)", [data.user, userName, date, reminder]);
 				query.on('end', function() {
 					slack.sendMsg(data.channel,'@'+userName+', seu lembrete "'+reminder+'" foi agendado para :calendar: '+originalDate+'.\n Irei te lembrar no momento que você ficar online nessa data.');
@@ -163,10 +165,12 @@ slack.on('message', function(data) {
 					slack.sendMsg(data.channel,'Ops, tem algo errado com os parametros que você me enviou.\n Para salvar um comunicado, use `!comunicado dd/mm/aaaa texto do comunicado`')
 					return;
 				}
-				var originalDate = date;
-				date = date.split('/');
-				date = date[2]+'-'+date[1]+'-'+date[0];
-				var reminder = reminderArgs.join(' ');//Unifica os pedaços da mensagem
+				var originalDate	= date;
+				date				= date.split('/');
+				date				= date[2]+'-'+date[1]+'-'+date[0];
+				var reminder	= reminderArgs.join(' ');//Unifica os pedaços da mensagem
+				var regExp		= /\<([^> ]+)\>/g; //Regular expression to identify links
+				reminder		= reminder.replace(regExp,function(x){ return x.substring(1,x.length-1); });
 				var query = dbClient.query("INSERT INTO bulletin(date, reminder, sent) values($1, $2, $3)", [date, reminder, 0]);
 				query.on('end', function() {
 					slack.sendMsg(data.channel,'O comunicado "'+reminder+'" foi agendado para :calendar: '+originalDate);
