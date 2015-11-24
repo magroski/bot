@@ -221,7 +221,7 @@ slack.on('channel_joined', function(data){
 
 var birthdays = [];
 birthdays['lozgabriel']		= '05/10';
-birthdays['marcus']			= '23/10';
+birthdays['marcus']		= '23/10';
 birthdays['bruna.barbosa']	= '23/10';
 birthdays['caroline.silva']	= '25/10';
 birthdays['jessica.dias']	= '25/11';
