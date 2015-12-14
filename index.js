@@ -7,11 +7,10 @@ var port = process.env.PORT || 5000
 var server = http.createServer(app)
 server.listen(port)
 
-var httpServer = http.createServer(function(request,response){
-	console.log(request);
-});
-
-httpServer.listen(8080);
+//var httpServer = http.createServer(function(request,response){
+//	console.log(request);
+//});
+//httpServer.listen(8080);
 
 // Requiring our module
 var slackAPI = require('slackbotapi');
