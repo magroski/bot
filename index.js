@@ -11,7 +11,7 @@ var httpServer = http.createServer(function(request,response){
 	console.log(request);
 });
 
-httpServer.listen(80);
+httpServer.listen(8080);
 
 // Requiring our module
 var slackAPI = require('slackbotapi');
