@@ -278,7 +278,9 @@ slack.on('presence_change', function(data){
 app.get('/', function(req, res){
    var origin = req.param('origin');
    if (origin==='deploy'){
-      slack.sendMsg('C0VA171FH', 'testing... '+origin);
-   } 
+      slack.sendMsg('C0VA171FH', 'Deploying new application version to *PRODUCTION*');
+   } else if (origin==='test'){
+      slack.sendMsg('C0VA171FH', 'Deploying new application version to *DEVELOPMENT / LEARN-TALENTIFY*');
+   }
 });
 
