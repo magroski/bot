@@ -276,6 +276,6 @@ slack.on('presence_change', function(data){
 });
 
 app.get('/', function(req, res){
-   slack.sendMsg('lucas', 'testing... '+req.query.id);
+   slack.sendMsg('C0VA171FH', 'testing... '+req.query.id);
 });
 
