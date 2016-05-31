@@ -7,11 +7,6 @@ var port = process.env.PORT || 5000
 var server = http.createServer(app)
 server.listen(port)
 
-//var httpServer = http.createServer(function(request,response){
-//	console.log(request);
-//});
-//httpServer.listen(8080);
-
 // Requiring our module
 var slackAPI = require('slackbotapi');
 
@@ -225,11 +220,6 @@ slack.on('channel_joined', function(data){
 });
 
 var birthdays = [];
-birthdays['lozgabriel']		= '05/10';
-birthdays['marcus']		= '23/10';
-birthdays['bruna.barbosa']	= '23/10';
-birthdays['caroline.silva']	= '25/10';
-birthdays['jessica.dias']	= '25/11';
 
 slack.on('presence_change', function(data){
 	if(data.presence=='active'){
@@ -284,3 +274,8 @@ slack.on('presence_change', function(data){
 		});
 	}
 });
+
+app.get('/', function(req, res){
+   slack.sendMsg('C03GNTC0P', 'testing... '+req.query.id);
+});
+
