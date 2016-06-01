@@ -278,9 +278,15 @@ slack.on('presence_change', function(data){
 app.get('/', function(req, res){
    var origin = req.param('origin');
    if (origin==='deploy'){
-      slack.sendMsg('C0VA171FH', 'Deploying new application version to *PRODUCTION*');
+      slack.sendMsg('C0VA171FH', ':warning: Deploying new application version to *PRODUCTION* environment :warning:');
+      slack.sendMsg('C03GNTC0P', ':warning: Atualização do *app.talentify* em progresso. Possível instabilidade durante os próximos minutos');
    } else if (origin==='test'){
-      slack.sendMsg('C0VA171FH', 'Deploying new application version to *DEVELOPMENT / LEARN-TALENTIFY*');
+      slack.sendMsg('C0VA171FH', 'Deploying new application version to *DEVELOPMENT / TEST* environment');
+   } else if (origin==='deploy-end'){
+      slack.sendMsg('C0VA171FH', ':partyparrot: Application deploy to *PRODUCTION* environment has finished :partyparrot:');
+      slack.sendMsg('C03GNTC0P', '*app.talentify* atualizado com sucesso! :congaparrot::congaparrot:');
+   } else if (origin==='test-end'){
+      slack.sendMsg('C0VA171FH', 'Application deploy to *DEVELOPMENT / TEST* environment has finished');
    }
 });
 
