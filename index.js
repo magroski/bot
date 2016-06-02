@@ -284,7 +284,7 @@ app.get('/', function(req, res){
       slack.sendMsg('C0VA171FH', 'Deploying new application version to *DEVELOPMENT / TEST* environment');
    } else if (origin==='deploy-end'){
       slack.sendMsg('C0VA171FH', ':partyparrot: Application deploy to *PRODUCTION* environment has finished :partyparrot:');
-      slack.sendMsg('C03GNTC0P', '*app.talentify* atualizado com sucesso! :congaparrot::congaparrot:');
+      slack.sendMsg('C03GNTC0P', '*app.talentify* atualizado com sucesso! :partyparrot:');
    } else if (origin==='test-end'){
       slack.sendMsg('C0VA171FH', 'Application deploy to *DEVELOPMENT / TEST* environment has finished');
    }
