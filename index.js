@@ -279,12 +279,15 @@ app.get('/', function(req, res){
    var origin = req.param('origin');
    if (origin==='deploy'){
       slack.sendMsg('C0VA171FH', ':warning: Deploying new application version to *PRODUCTION* environment :warning:');
-      slack.sendMsg('C03GNTC0P', ':warning: Atualização do *app.talentify* em progresso. Possível instabilidade durante os próximos minutos');
+      slack.sendMsg('C03GNTC0P', ':warning: Atualização do sistema em progresso. Possível instabilidade durante os próximos minutos');
    } else if (origin==='test'){
       slack.sendMsg('C0VA171FH', 'Deploying new application version to *DEVELOPMENT / TEST* environment');
    } else if (origin==='deploy-end'){
       slack.sendMsg('C0VA171FH', ':partyparrot: Application deploy to *PRODUCTION* environment has finished :partyparrot:');
-      slack.sendMsg('C03GNTC0P', '*app.talentify* atualizado com sucesso! :partyparrot:');
+      slack.sendMsg('C03GNTC0P', ':white_check_mark: Sistema atualizado com sucesso!');
+   } else if (origin==='deploy-msg'){
+      slack.sendMsg('C0VA171FH', ':partyparrot: Application deploy to *PRODUCTION* environment has finished :partyparrot:');
+      slack.sendMsg('C03GNTC0P', ':talentify: Nova versão da plataforma! Veja o que mudou em https://app.talentify.io/changelog ');
    } else if (origin==='test-end'){
       slack.sendMsg('C0VA171FH', 'Application deploy to *DEVELOPMENT / TEST* environment has finished');
    }
