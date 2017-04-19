@@ -290,6 +290,10 @@ app.get('/', function(req, res){
       slack.sendMsg('C03GNTC0P', ':talentify: Nova versão da plataforma! Veja o que mudou em https://app.talentify.io/changelog ');
    } else if (origin==='test-end'){
       slack.sendMsg('C0VA171FH', 'Application deploy to *DEVELOPMENT / TEST* environment has finished');
+   } else if (origin==='flux-dev'){
+      slack.sendMsg('C0VA171FH', ':warning: *TalentFlux* being deployed to *test* environment');
+   } else if (origin==='flux-dev-end'){
+      slack.sendMsg('C0VA171FH', ':white_check_mark: *TalentFlux* deploy to *test* environment has finished');
    }
 });
 
