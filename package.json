@@ -16,7 +16,7 @@
     "pg": "*"
   },
   "engines": {
-    "node": "*"
+    "node": "0.10"
   },
   "scripts": {
     "start": "node index.js"
