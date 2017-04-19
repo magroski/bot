@@ -19,6 +19,6 @@
     "node": "*"
   },
   "scripts": {
-    "start": "node --harmony index.js"
+    "start": "node index.js"
   }
 }
