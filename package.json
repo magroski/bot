@@ -16,7 +16,7 @@
     "pg": "*"
   },
   "engines": {
-    "node": "0.12.7"
+    "node": "*"
   },
   "scripts": {
     "start": "node --harmony index.js"
