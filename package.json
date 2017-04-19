@@ -16,9 +16,9 @@
     "pg": "*"
   },
   "engines": {
-    "node": "0.10"
+    "node": "*"
   },
   "scripts": {
-    "start": "node --harmony index.js"
+    "start": "node index.js"
   }
 }
